@@ -1,0 +1,87 @@
+/* Container Layout */
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.text-section {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.app-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+}
+
+.app-description {
+  font-size: 18px;
+  color: #555;
+  margin: 15px 0;
+  line-height: 1.6;
+}
+
+.cta-text {
+  margin-top: 20px;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #45a049;
+}
+
+/* Image Section */
+.image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.task-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .text-section {
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .app-title {
+    font-size: 28px;
+  }
+
+  .app-description {
+    font-size: 16px;
+  }
+
+  .cta-button {
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+}
