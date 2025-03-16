@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import taskImage from '../assets/task.png'; // Make sure to add an image in your assets folder
 
 const Home = () => {
+  const user = useSelector(state => state.user.user);
   return (
     <div className="home-container">
       <div className="text-section">
@@ -12,7 +14,7 @@ const Home = () => {
           MyTaskManager helps you manage daily tasks effortlessly. Plan, prioritize, and track your progress with ease.
         </p>
         <p className="cta-text">
-          <Link to="/login" className="cta-button">Get Started</Link>
+          <Link to={user ? "/todays" : "/login"} className="cta-button">Get Started</Link>
         </p>
       </div>
       <div className="image-section">

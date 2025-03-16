@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-// import { auth, createUserWithEmailAndPassword, createUserProfileDocument } from "../firebase/firebase";
+import { useNavigate,Link } from "react-router-dom";
+import { auth, createUserWithEmailAndPassword, createUserProfileDocument } from "../firebase/firebase";
 import "./Signup.css";
 
 export default function Signup() {
@@ -18,14 +18,14 @@ export default function Signup() {
       alert("Passwords do not match!");
       return;
     }
-    // try {
-    //   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    //   const user = userCredential.user;
-    //   await createUserProfileDocument(user, {displayName})
-    //   navigate("/login");
-    // } catch (error) {
-    //   console.error("Error signing up:", error.message);
-    // }
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      await createUserProfileDocument(user, {displayName})
+      navigate("/login");
+    } catch (error) {
+      console.error("Error signing up:", error.message);
+    }
   };
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -80,6 +80,9 @@ export default function Signup() {
             />
           </div>
           <button type="submit" className="signup-btn">Sign Up</button>
+          <p>
+            Already have an account? <Link className="login-link" to="/login">Login</Link>
+          </p>
         </form>
       </div>
     </div>

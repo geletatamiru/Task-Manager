@@ -3,57 +3,84 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 50px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
+  background-color: white;
+  padding: 15px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Logo and Title */
 .logo-title {
   display: flex;
   align-items: center;
+  margin-left: 20px;
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
   margin-right: 10px;
+  color: black;
 }
 
 .title {
   font-size: 20px;
-  color: #333;
+  font-weight: bold;
+  color: black;
 }
 
-/* Navigation Menu */
+/* Navigation */
 .nav {
   display: flex;
 }
 
 .nav-list {
-  display: flex;
   list-style: none;
+  display: flex;
   gap: 20px;
+  padding: 0;
+  margin: 0;
 }
 
 .nav-item {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .nav-link {
   text-decoration: none;
-  font-size: 18px;
-  color: #717082;
-  transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
-  padding: 5px 10px;
+  font-size: 16px;
+  color: black;
+  padding: 10px;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
 }
 
-.nav-link:hover,
-.active {
-  color: black;
+.nav-link.active {
   font-weight: bold;
   border-bottom: 2px solid black;
+}
+
+/* Disabled Links for Logged-Out Users */
+.nav-link.disabled {
+  color: gray;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Logout Button */
+.nav-link.logout {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: black;
+  cursor: pointer;
+  padding: 10px;
+  transition: color 0.3s ease;
+}
+
+.nav-link.logout:hover {
+  color: red;
 }
 
 /* Hamburger Menu Button */
@@ -61,27 +88,22 @@
   display: none;
   background: none;
   border: none;
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
-  padding: 10px;
 }
 
-/* Mobile Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-
   .nav {
+    display: none;
+    flex-direction: column;
     position: absolute;
     top: 60px;
     right: 0;
     background-color: white;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: none;
-    flex-direction: column;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
   }
 
   .nav.open {
@@ -90,13 +112,20 @@
 
   .nav-list {
     flex-direction: column;
-    gap: 10px;
-    padding: 20px;
+    gap: 0;
+  }
+
+  .nav-item {
+    width: 100%;
+    text-align: center;
   }
 
   .nav-link {
-    padding: 10px;
-    font-size: 20px;
+    display: block;
+    padding: 12px;
+  }
+
+  .menu-toggle {
     display: block;
   }
 }

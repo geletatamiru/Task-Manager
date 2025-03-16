@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { auth, googleProvider,signInWithPopup , signInWithRedirect, signInWithEmailAndPassword } from "../firebase/firebase";
+import { auth, googleProvider,signInWithPopup , signInWithEmailAndPassword } from "../firebase/firebase";
 import "./Login.css";
 
 export default function Login() {
@@ -10,25 +10,25 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // try {
-    //   await signInWithEmailAndPassword(auth, email, password);
-    //   alert("Login successful!");
-    //   setEmail("");
-    //   setPassword("");
-    //   navigate("/"); // 👈 Redirect to Home Page after login
-    // } catch (error) {
-    //   alert(error.message);
-    // }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      alert("Login successful!");
+      setEmail("");
+      setPassword("");
+      navigate("/"); // 👈 Redirect to Home Page after login
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const handleGoogleLogin = async () => {
-    // try {
-    //   const result = await signInWithPopup(auth, googleProvider);
-    //   alert("Login successful!");
-    //   navigate('/');
-    // } catch (error) {
-    //   console.error("Google Sign-In Error:", error.message);
-    // }
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      alert("Login successful!");
+      navigate('/');
+    } catch (error) {
+      console.error("Google Sign-In Error:", error.message);
+    }
   };
 
   return (
