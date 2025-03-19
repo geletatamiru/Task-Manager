@@ -7,14 +7,10 @@ export default function TaskItem({ task }) {
   const dispatch = useDispatch();
   if(!task) return null;
   const handleCheckboxClick = () => {
-    console.log(typeof task.id);
+    
   }
   const handleDelete = () => {
-    try {
       dispatch(deleteTask(task.id)).unwrap()
-    }catch(err){
-      console.log("Failed to delete Task.", err);
-    }
   }
 
   return (

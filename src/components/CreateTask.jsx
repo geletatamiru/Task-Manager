@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 import { Timestamp } from "firebase/firestore";
 import { addTask } from "../state/taskSlice";
 import "./CreateTask.css";
@@ -34,7 +33,6 @@ export default function CreateTask({ onShow }) {
 
     // Create the task object to be added to Firestore
     const newTask = {
-      id: uuidv4(),
       ...task,
       date: firestoreTimestamp, // Store the date as a Firestore Timestamp
       completed: false,

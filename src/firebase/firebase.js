@@ -98,7 +98,6 @@ export const deleteTaskFromFirestore = async (taskId) => {
       const taskDocRef = doc(db, 'tasks', taskId);
       await deleteDoc(taskDocRef);
       console.log(`Task with ID ${taskId} deleted successfully.`); // Optional success log
-      return taskId;
     } catch (error) {
       console.error(`Error deleting task with ID ${taskId}:`, error); // Log the error
       throw error; // Re-throw the error so the rejected case of the thunk is handled

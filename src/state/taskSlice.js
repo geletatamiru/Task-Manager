@@ -35,8 +35,8 @@ export const deleteTask = createAsyncThunk(
   'tasks/deleteTask',
   async (taskId) => {
     try {
-      const id = await deleteTaskFromFirestore(taskId);
-      return id;
+      await deleteTaskFromFirestore(taskId);
+      return taskId;
     } catch (error) {
       throw error;
     }
