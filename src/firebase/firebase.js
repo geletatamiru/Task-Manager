@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, getDocs, doc,setDoc, addDoc, collection, query, where ,Timestamp, deleteDoc } from "firebase/firestore";
+import { getFirestore, getDoc, getDocs, doc,setDoc, addDoc, collection, query, where ,Timestamp, deleteDoc, updateDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyCh-iED_SX64ZN75m282JUpbLMM1tB_t7U",
@@ -103,7 +103,15 @@ export const deleteTaskFromFirestore = async (taskId) => {
       throw error; // Re-throw the error so the rejected case of the thunk is handled
     }
 }
-
+export const toggleCompletedInFirestore = async ({id, completed}) => {
+  try {
+    const taskDocRef = doc(db, 'tasks', id)
+    await updateDoc(taskDocRef, { completed });
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+}
 // Initialize Authentication
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();

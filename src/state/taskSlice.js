@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { 
   addTaskToFirestore, 
-  deleteTaskFromFirestore
+  deleteTaskFromFirestore,
+  toggleCompletedInFirestore
 } from "../firebase/firebase";
 import { fetchTodaysTasksFromFirestore } from "../firebase/firebase";
 export const fetchTodaysTasks = createAsyncThunk(
@@ -42,6 +43,17 @@ export const deleteTask = createAsyncThunk(
     }
   }
 );
+export const toggleCompleted = createAsyncThunk(
+  'tasks/toggleCompleted',
+  async (data) => {
+    try {
+      await toggleCompletedInFirestore(data)
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const taskSlice = createSlice({
   name: "tasks",
   initialState: {
@@ -70,6 +82,13 @@ const taskSlice = createSlice({
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks = state.tasks.filter(task => task.id !== action.payload); // Filter out the deleted task
+      })
+      .addCase(toggleCompleted.fulfilled, (state, action) => {
+        const task = state.tasks.find(task => task.id === action.payload.id);
+        console.log(task)
+        if (task) {
+          task.completed = action.payload.completed; // Toggle completed status
+        }
       })
   }   
 });

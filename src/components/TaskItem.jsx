@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { toggleCompleted } from "../state/taskSlice";
 import { deleteTask } from "../state/taskSlice";
 import "./TaskItem.css";
 
@@ -7,7 +8,7 @@ export default function TaskItem({ task }) {
   const dispatch = useDispatch();
   if(!task) return null;
   const handleCheckboxClick = () => {
-    
+    dispatch(toggleCompleted({ id: task.id, completed: !task.completed }));
   }
   const handleDelete = () => {
       dispatch(deleteTask(task.id)).unwrap()
