@@ -1,0 +1,98 @@
+/* Overall task item container */
+.task-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox container */
+.checkbox-container input {
+  margin-right: 15px;
+  cursor: pointer;
+}
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  appearance: none; /* Remove default checkbox */
+  border: 2px solid black;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: black;
+  position: relative;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+  text-align: center;
+}
+
+/* Title and description container */
+.title-desc-container {
+  flex: 1;
+}
+
+/* Task title styling */
+.task-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Task description styling */
+.task-desc {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+/* Buttons container */
+.buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+/* Button styling */
+.edit, .delete {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+/* Edit button styling */
+.edit {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.edit:hover {
+  background-color: #45a049;
+}
+
+/* Delete button styling */
+.delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete:hover {
+  background-color: #da190b;
+}

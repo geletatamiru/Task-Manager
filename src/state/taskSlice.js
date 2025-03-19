@@ -1,26 +1,78 @@
-// features/tasks/taskSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { 
+  addTaskToFirestore, 
+  deleteTaskFromFirestore
+} from "../firebase/firebase";
+import { fetchTodaysTasksFromFirestore } from "../firebase/firebase";
+export const fetchTodaysTasks = createAsyncThunk(
+  "tasks/fetchTodaysTasks",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const tasks = await fetchTodaysTasksFromFirestore(userId);
+      return tasks.map(task => ({
+        ...task,
+        date: task.date ? task.date.toMillis() : null, // Handle potential null dates
+      })); 
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
-const initialState = {
-  tasks: [],
-};
+export const addTask = createAsyncThunk(
+  "tasks/addTask",
+  async (task, { rejectWithValue }) => {
+    try {
+      const addedTask = await addTaskToFirestore(task);
+      return addedTask;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
+export const deleteTask = createAsyncThunk(
+  'tasks/deleteTask',
+  async (taskId) => {
+    try {
+      const id = await deleteTaskFromFirestore(taskId);
+      return id;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const taskSlice = createSlice({
-  name: 'tasks',
-  initialState,
-  reducers: {
-    addTask(state, action) {
-      state.tasks.push(action.payload);
-    },
-    deleteTask(state, action) {
-      state.tasks = state.tasks.filter(task => task.id !== action.payload);
-    },
-    completeTask(state, action) {
-      const task = state.tasks.find(task => task.id === action.payload);
-      if (task) task.completed = true;
-    },
+  name: "tasks",
+  initialState: {
+    tasks: [],
+    status: "idle",
+    error: null
   },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTodaysTasks.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTodaysTasks.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.tasks = action.payload; // Update state with real-time tasks
+      })
+      .addCase(fetchTodaysTasks.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(addTask.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.tasks.push(action.payload); 
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasks = state.tasks.filter(task => task.id !== action.payload); // Filter out the deleted task
+      })
+  }   
 });
 
-export const { addTask, deleteTask, completeTask } = taskSlice.actions;
+export const { setTasks } = taskSlice.actions;
 export default taskSlice.reducer;

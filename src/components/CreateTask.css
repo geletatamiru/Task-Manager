@@ -1,0 +1,59 @@
+.form-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 60vw;
+  height: 150px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+.form-input .title-desc {
+  display: flex;
+  flex-direction: column;
+}
+.title-desc .Title {
+  border: none;
+  outline: none;
+  height: 30px;
+  font-size: 15px;
+}
+.title-desc .desc {
+  border: none;
+  outline: none;
+  height: 30px;
+}
+.form-input .date-priority {
+  display: flex;
+}
+.date-priority .date {
+  margin-right: 10px;
+  cursor: pointer;
+}
+.date-priority .priority {
+  cursor: pointer;
+}
+.form-input .buttons {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid gray;
+  padding: 10px 5px;
+  margin-left: -10px;
+}
+.buttons .cancel-btn, .buttons .add-btn {
+  border: none;
+  padding: 6px 15px;
+  border-radius: 5px;
+}
+.buttons .cancel-btn {
+  background: rgb(192, 190, 190);
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+.buttons .add-btn {
+  color: white;
+  background-color: orangered;
+  margin-left: 10px;
+  cursor: pointer;
+}

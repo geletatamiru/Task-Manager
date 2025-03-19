@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { login,logout } from "./state/userSlice";
 import "./App.css";
+import TodayTask from "./pages/TodayTask";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ export default function App() {
       <Header />
         <Routes>
           <Route path="/" element={<Home />}/>
+          <Route path="/today" element={<TodayTask />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
         </Routes>

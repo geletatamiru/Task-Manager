@@ -1,14 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc,setDoc, collection } from "firebase/firestore";
+import { getFirestore, getDoc, getDocs, doc,setDoc, addDoc, collection, query, where ,Timestamp, deleteDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 const firebaseConfig = {
-  apiKey: "AIzaSyDTL_knHUO93IEYsRBURPqM4R7XPUxuUEY",
-  authDomain: "ecommerce-527bf.firebaseapp.com",
-  projectId: "ecommerce-527bf",
-  storageBucket: "ecommerce-527bf.firebasestorage.app",
-  messagingSenderId: "224178638293",
-  appId: "1:224178638293:web:f521b94ca1c7fefa16415c",
-  measurementId: "G-DE9HLZD9F2"
+  apiKey: "AIzaSyCh-iED_SX64ZN75m282JUpbLMM1tB_t7U",
+  authDomain: "task-mangement-app-1f2eb.firebaseapp.com",
+  projectId: "task-mangement-app-1f2eb",
+  storageBucket: "task-mangement-app-1f2eb.firebasestorage.app",
+  messagingSenderId: "90472714582",
+  appId: "1:90472714582:web:cc31beb41157ca696446f7"
 };
 const app = initializeApp(firebaseConfig);
 
@@ -40,6 +39,72 @@ const createUserProfileDocument = async (userAuth, additionalData) => {
 
   return userRef;
 };
+
+
+
+export const fetchTodaysTasksFromFirestore = async (userId) => {
+  const today = new Date();
+  const startOfDay = new Date(today);
+  startOfDay.setHours(0, 0, 0, 0); // Get the start of today
+
+  const endOfDay = new Date(today);
+  endOfDay.setHours(23, 59, 59, 999); // Get the end of today
+
+  try {
+    // Query for tasks by userId and date range
+    const tasksQuery = query(
+      collection(db, "tasks"),
+      where("userId", "==", userId),
+      where("date", ">=", startOfDay),
+      where("date", "<=", endOfDay)
+    );
+
+    const querySnapshot = await getDocs(tasksQuery);
+    const tasks = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return tasks;
+  } catch (error) {
+    throw new Error("Error fetching today's tasks: " + error.message);
+  }
+};
+
+export const addTaskToFirestore = async (task) => {
+  try {
+    const docRef = await addDoc(collection(db, 'tasks'), task);
+    const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const taskData = { id: docSnapshot.id, ...docSnapshot.data() };
+
+        // Convert date to milliseconds if it's a Timestamp
+        if (taskData.date && typeof taskData.date.toMillis === 'function') {
+          taskData.date = taskData.date.toMillis();
+        }
+
+        return taskData;
+      } else {
+        throw new Error('Failed to retrieve document data after adding.');
+      }
+  } catch (error) {
+    console.error("Error adding task:", error);
+    throw error;
+  }
+};
+
+export const deleteTaskFromFirestore = async (taskId) => {
+    try {
+      const taskDocRef = doc(db, 'tasks', taskId);
+      await deleteDoc(taskDocRef);
+      console.log(`Task with ID ${taskId} deleted successfully.`); // Optional success log
+      return taskId;
+    } catch (error) {
+      console.error(`Error deleting task with ID ${taskId}:`, error); // Log the error
+      throw error; // Re-throw the error so the rejected case of the thunk is handled
+    }
+}
+
 // Initialize Authentication
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();

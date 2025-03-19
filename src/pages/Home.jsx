@@ -14,7 +14,7 @@ const Home = () => {
           MyTaskManager helps you manage daily tasks effortlessly. Plan, prioritize, and track your progress with ease.
         </p>
         <p className="cta-text">
-          <Link to={user ? "/todays" : "/login"} className="cta-button">Get Started</Link>
+          <Link to={user ? "/today" : "/login"} className="cta-button">Get Started</Link>
         </p>
       </div>
       <div className="image-section">
