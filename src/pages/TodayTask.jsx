@@ -10,7 +10,6 @@ export default function TodayTask() {
     <div className='today-container'>
       <h2>Today's Tasks</h2>
       <TasksList />
-      <TaskItem />
       {
         
         show && <CreateTask onShow={() => setShow(false)}/>

@@ -2,14 +2,29 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { 
   addTaskToFirestore, 
   deleteTaskFromFirestore,
-  toggleCompletedInFirestore
+  toggleCompletedInFirestore,
+  fetchTodaysTasksFromFirestore,
+  fetchUpcomingTasksFromFirestore
 } from "../firebase/firebase";
-import { fetchTodaysTasksFromFirestore } from "../firebase/firebase";
 export const fetchTodaysTasks = createAsyncThunk(
   "tasks/fetchTodaysTasks",
   async (userId, { rejectWithValue }) => {
     try {
       const tasks = await fetchTodaysTasksFromFirestore(userId);
+      return tasks.map(task => ({
+        ...task,
+        date: task.date ? task.date.toMillis() : null, // Handle potential null dates
+      })); 
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const fetchUpcomingTasks = createAsyncThunk(
+  "tasks/fetchUpcomingTasks",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const tasks = await fetchUpcomingTasksFromFirestore(userId);
       return tasks.map(task => ({
         ...task,
         date: task.date ? task.date.toMillis() : null, // Handle potential null dates
@@ -57,41 +72,71 @@ export const toggleCompleted = createAsyncThunk(
 const taskSlice = createSlice({
   name: "tasks",
   initialState: {
-    tasks: [],
-    status: "idle",
-    error: null
+    todaysTasks: [],
+    upcomingTasks: [],
+    todaysStatus: "idle",   // Status for today's tasks
+    upcomingStatus: "idle", // Status for upcoming tasks
+    todaysError: null,      // Error for today's tasks
+    upcomingError: null,    // Error for upcoming tasks
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchTodaysTasks.pending, (state) => {
-        state.status = "loading";
+        state.todaysStatus = "loading";
       })
       .addCase(fetchTodaysTasks.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.tasks = action.payload; // Update state with real-time tasks
+        state.todaysStatus = "succeeded";
+        
+        state.todaysTasks = action.payload;
       })
       .addCase(fetchTodaysTasks.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
+        state.todaysStatus = "failed";
+        state.todaysError = action.payload;
       })
       .addCase(addTask.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.tasks.push(action.payload); 
-      })
-      .addCase(deleteTask.fulfilled, (state, action) => {
-        state.loading = false;
-        state.tasks = state.tasks.filter(task => task.id !== action.payload); // Filter out the deleted task
-      })
-      .addCase(toggleCompleted.fulfilled, (state, action) => {
-        const task = state.tasks.find(task => task.id === action.payload.id);
-        console.log(task)
-        if (task) {
-          task.completed = action.payload.completed; // Toggle completed status
+        const taskDate = new Date(action.payload.date); // Convert to Date object
+        const today = new Date();
+        
+        // Check if the task's date is today (ignoring time)
+        const isToday =
+          taskDate.getFullYear() === today.getFullYear() &&
+          taskDate.getMonth() === today.getMonth() &&
+          taskDate.getDate() === today.getDate();
+      
+        if (isToday) {
+          state.todaysTasks.push(action.payload);
+        }else {
+          state.upcomingTasks.push(action.payload);
         }
       })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.todaysTasks = state.todaysTasks.filter(task => task.id !== action.payload); // Filter out the deleted task
+        state.upcomingTasks = state.upcomingTasks.filter(task => task.id !== action.payload); // Filter out the deleted task
+      })
+      .addCase(toggleCompleted.fulfilled, (state, action) => {
+        const todayTask = state.todaysTasks.find(task => task.id === action.payload.id);
+        const upcomingTask = state.upcomingTasks.find(task => task.id === action.payload.id);
+        if (todayTask) {
+          todayTask.completed = action.payload.completed; // Toggle completed status
+        }
+        if(upcomingTask){
+          upcomingTask.completed = action.payload.completed; // Toggle completed status
+        }
+      })
+      .addCase(fetchUpcomingTasks.pending, (state) => {
+        state.upcomingStatus = "loading";
+      })
+      .addCase(fetchUpcomingTasks.fulfilled, (state, action) => {
+        state.upcomingStatus = "succeeded";
+        state.upcomingTasks = action.payload;
+      })
+      .addCase(fetchUpcomingTasks.rejected, (state, action) => {
+        state.upcomingStatus = "failed";
+        state.upcomingError = action.payload;
+      });
   }   
 });
 
-export const { setTasks } = taskSlice.actions;
 export default taskSlice.reducer;

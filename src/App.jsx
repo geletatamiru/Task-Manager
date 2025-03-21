@@ -10,9 +10,9 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { login,logout } from "./state/userSlice";
-import "./App.css";
 import TodayTask from "./pages/TodayTask";
-
+import UpcomingTasks from "./pages/UpcomingTasks";
+import "./App.css";
 export default function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -42,6 +42,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/today" element={<TodayTask />}/>
+          <Route path="/upcoming" element={<UpcomingTasks />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
         </Routes>

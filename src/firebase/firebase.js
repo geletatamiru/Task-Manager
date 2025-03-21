@@ -70,7 +70,27 @@ export const fetchTodaysTasksFromFirestore = async (userId) => {
     throw new Error("Error fetching today's tasks: " + error.message);
   }
 };
+export const fetchUpcomingTasksFromFirestore = async (userId) => {
+  try {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // Ensure we compare only the date part
+    const tasksRef = collection(db, "tasks");
+    const q = query(
+      tasksRef,
+      where("userId", "==", userId),
+      where("date", ">", Timestamp.fromDate(today)) // Fetch tasks with future dates
+    );
 
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error("Error fetching upcoming tasks:", error);
+    throw error;
+  }
+};
 export const addTaskToFirestore = async (task) => {
   try {
     const docRef = await addDoc(collection(db, 'tasks'), task);

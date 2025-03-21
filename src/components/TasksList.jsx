@@ -17,26 +17,26 @@ const TasksList = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const todayDate = today();
-  const { tasks, status, error } = useSelector((state) => state.tasks);
+  const { todaysTasks, todaysStatus, todaysError } = useSelector((state) => state.tasks);
 
   useEffect(() => {
-    if(user?.uid && status === 'idle'){
+    if(user?.uid && todaysStatus === 'idle'){
       dispatch(fetchTodaysTasks(user.uid));
     }
-  },[dispatch, user?.uid, status])
+  },[dispatch, user?.uid, todaysStatus])
   let content;
-  if(status === 'loading'){
+  if(todaysStatus === 'loading'){
     content = <p>"Loading..."</p>
-  }else if(status === 'succeeded'){
+  }else if(todaysStatus === 'succeeded'){
     content = (
       <ul className="tasks-list">
-          {tasks.map((task) => {
+          {todaysTasks.map((task) => {
             return <TaskItem key={task.id} task={task} />
           })}
         </ul>
     )
-  } else if (status === 'failed'){
-    content = <p>{error}</p>
+  } else if (todaysStatus === 'failed'){
+    content = <p>{todaysError}</p>
   }
   return (
     <div className="tasks-list-container">

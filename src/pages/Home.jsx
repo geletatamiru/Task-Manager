@@ -11,7 +11,7 @@ const Home = () => {
       <div className="text-section">
         <h1 className="app-title">Stay Organized & Boost Productivity</h1>
         <p className="app-description">
-          MyTaskManager helps you manage daily tasks effortlessly. Plan, prioritize, and track your progress with ease.
+          <strong>planAhead</strong> helps you manage daily tasks effortlessly. Plan, prioritize, and track your progress with ease.
         </p>
         <p className="cta-text">
           <Link to={user ? "/today" : "/login"} className="cta-button">Get Started</Link>

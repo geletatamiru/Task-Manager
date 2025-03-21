@@ -1,0 +1,28 @@
+/* Container styling */
+.upcoming-tasks-list-container {
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.upcoming-tasks-heading {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.upcoming-tasks-list {
+  list-style: none;
+  padding: 0;
+}
+.upcoming-loading, .upcoming-error {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+}
+@media (max-width: 600px) {
+  .upcoming-tasks-list-container {
+    width: 90%;
+  }
+}

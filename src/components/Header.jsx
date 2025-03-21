@@ -25,8 +25,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo-title">
-        <div className="logo">Logo</div>
-        <h1 className="title">Task Manager</h1>
+        <div className="logo">planAhead</div>
       </div>
 
       {/* Hamburger Menu Button */}
