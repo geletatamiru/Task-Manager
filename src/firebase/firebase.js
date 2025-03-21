@@ -2,13 +2,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, getDocs, doc,setDoc, addDoc, collection, query, where ,Timestamp, deleteDoc, updateDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 const firebaseConfig = {
-  apiKey: "AIzaSyCh-iED_SX64ZN75m282JUpbLMM1tB_t7U",
-  authDomain: "task-mangement-app-1f2eb.firebaseapp.com",
-  projectId: "task-mangement-app-1f2eb",
-  storageBucket: "task-mangement-app-1f2eb.firebasestorage.app",
-  messagingSenderId: "90472714582",
-  appId: "1:90472714582:web:cc31beb41157ca696446f7"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
+console.log(import.meta.env.VITE_FIREBASE_API_KEY);
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
