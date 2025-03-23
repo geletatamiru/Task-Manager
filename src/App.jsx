@@ -12,10 +12,11 @@ import Signup from "./pages/Signup";
 import { login,logout } from "./state/userSlice";
 import TodayTask from "./pages/TodayTask";
 import UpcomingTasks from "./pages/UpcomingTasks";
+import CompletedTasks from "./pages/CompletedTasks";
 import "./App.css";
+
 export default function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (userAuth) => {
       if (userAuth) {
@@ -35,7 +36,9 @@ export default function App() {
   
     return () => unsubscribe();
   }, []);
-  
+  const Setting = () => {
+    return <div>Settings</div>
+  }
   return (
     <div>
       <Header />
@@ -43,8 +46,10 @@ export default function App() {
           <Route path="/" element={<Home />}/>
           <Route path="/today" element={<TodayTask />}/>
           <Route path="/upcoming" element={<UpcomingTasks />}/>
+          <Route path="/completed" element={<CompletedTasks />} />
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
+          <Route path="/settings" element={<Setting />}/>
         </Routes>
       <Footer />
     </div>

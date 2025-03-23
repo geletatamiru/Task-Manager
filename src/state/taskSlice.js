@@ -4,7 +4,8 @@ import {
   deleteTaskFromFirestore,
   toggleCompletedInFirestore,
   fetchTodaysTasksFromFirestore,
-  fetchUpcomingTasksFromFirestore
+  fetchUpcomingTasksFromFirestore,
+  fetchCompletedTasksFromFirestore
 } from "../firebase/firebase";
 export const fetchTodaysTasks = createAsyncThunk(
   "tasks/fetchTodaysTasks",
@@ -34,7 +35,20 @@ export const fetchUpcomingTasks = createAsyncThunk(
     }
   }
 );
-
+export const fetchCompletedTasks = createAsyncThunk(
+  "tasks/fetchCompletedTasks",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const completedTasks = await fetchCompletedTasksFromFirestore(userId);
+      console.log(completedTasks);
+      return completedTasks.map(task => ({
+        ...task,
+        date: task.date ? task.date.toMillis() : null
+    }));
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  })
 export const addTask = createAsyncThunk(
   "tasks/addTask",
   async (task, { rejectWithValue }) => {
@@ -74,10 +88,13 @@ const taskSlice = createSlice({
   initialState: {
     todaysTasks: [],
     upcomingTasks: [],
-    todaysStatus: "idle",   // Status for today's tasks
-    upcomingStatus: "idle", // Status for upcoming tasks
-    todaysError: null,      // Error for today's tasks
-    upcomingError: null,    // Error for upcoming tasks
+    completedTasks: [],
+    todaysStatus: "idle",   
+    upcomingStatus: "idle",
+    completedStatus: "idle", 
+    todaysError: null,   
+    upcomingError: null,
+    completedError: null 
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -118,12 +135,19 @@ const taskSlice = createSlice({
       .addCase(toggleCompleted.fulfilled, (state, action) => {
         const todayTask = state.todaysTasks.find(task => task.id === action.payload.id);
         const upcomingTask = state.upcomingTasks.find(task => task.id === action.payload.id);
+
+        if(action.payload.completed == true){
+          state.completedTasks.push({id: action.payload.id,title: action.payload.title,date: action.payload.date})
+        }else if(action.payload.completed == false){
+          state.completedTasks = state.completedTasks.filter(task => task.id !== action.payload.id);
+        }
         if (todayTask) {
           todayTask.completed = action.payload.completed; // Toggle completed status
         }
         if(upcomingTask){
           upcomingTask.completed = action.payload.completed; // Toggle completed status
         }
+        
       })
       .addCase(fetchUpcomingTasks.pending, (state) => {
         state.upcomingStatus = "loading";
@@ -135,6 +159,17 @@ const taskSlice = createSlice({
       .addCase(fetchUpcomingTasks.rejected, (state, action) => {
         state.upcomingStatus = "failed";
         state.upcomingError = action.payload;
+      })
+      .addCase(fetchCompletedTasks.pending, (state) => {
+        state.completedStatus = "loading";
+      })
+      .addCase(fetchCompletedTasks.fulfilled, (state, action) => {
+        state.completedStatus = "succeeded";
+        state.completedTasks = action.payload;
+      })
+      .addCase(fetchCompletedTasks.rejected, (state, action) => {
+        state.completedStatus = "failed";
+        state.completedError = action.payload;
       });
   }   
 });

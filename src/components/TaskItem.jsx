@@ -8,7 +8,7 @@ export default function TaskItem({ task }) {
   const dispatch = useDispatch();
   if(!task) return null;
   const handleCheckboxClick = () => {
-    dispatch(toggleCompleted({ id: task.id, completed: !task.completed }));
+    dispatch(toggleCompleted({ ...task, completed: !task.completed }));
   }
   const handleDelete = () => {
       dispatch(deleteTask(task.id)).unwrap()

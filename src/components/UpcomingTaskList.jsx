@@ -37,8 +37,8 @@ const UpcomingTaskList = () => {
           : [task];
     }
   });
-  if (upcomingStatus === "loading") return <p className="loading">Loading upcoming tasks...</p>;
-  if (upcomingStatus === "failed") return <p className="error">Error: {upcomingError}</p>;
+  if (upcomingStatus === "loading") return <p className="upcoming-loading">Loading upcoming tasks...</p>;
+  if (upcomingStatus === "failed") return <p className="upcoming-error">Error: {upcomingError}</p>;
   return (
     <div className="upcoming-tasks-list-container">
           <h2 className="upcoming-task-heading">Tomorrow</h2>

@@ -92,6 +92,34 @@ export const fetchUpcomingTasksFromFirestore = async (userId) => {
     throw error;
   }
 };
+export const fetchCompletedTasksFromFirestore = async (userId) => {
+  try {
+    const now = new Date();
+    const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999); // Today 23:59:59
+
+    const lastWeekStart = new Date();
+    lastWeekStart.setDate(lastWeekStart.getDate() - 7 - lastWeekStart.getDay() + 1); // Last week's Monday
+    lastWeekStart.setHours(0, 0, 0, 0);
+    const tasksRef = collection(db, "tasks");
+    const q = query(
+      tasksRef,
+      where("userId", "==", userId),
+      where("completed", "==", true),
+      where("date", ">=", lastWeekStart),
+      where("date", "<=", todayEnd)
+    );
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      title: doc.data().title,
+      date: doc.data().date
+    }));
+  } catch (error) {
+    console.error("Error fetching completed tasks:", error);
+    throw error;
+  }
+};
 export const addTaskToFirestore = async (task) => {
   try {
     const docRef = await addDoc(collection(db, 'tasks'), task);
